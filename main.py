@@ -13,6 +13,10 @@ PROCESSO DE CRIPTOGRAFAR
 6 - adicione paddingLenghtBinary no final de bruto
 7 - defina words para bruto dividido em uma lista de partes iguais de 256 bits
 
+0(2^0-1)-63(2^6-1) -> XOR XOR
+64(2^6)-127(2^6-1) -> XOR XNOR
+128(2^7)-191(2^8-1) -> XNOR XOR
+192-255 -> XNOR XNOR
 
 
 PROCESSO DE DESCRIPTOGRAFAR
