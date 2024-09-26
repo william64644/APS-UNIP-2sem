@@ -1,3 +1,7 @@
+"""
+O experimento revelou que esse algorítimo irá reverter o processo de criptografia ao criptografar a sua saída com a mesma chave
+"""
+
 data = []
 keys = []
 intermediates = [0]*16
@@ -21,7 +25,6 @@ print(data)
 print("Keys:")
 print(keys)
 
-# A coisa mais horrível que eu escrevi na vida
 def XOR(word1, word2):
     if word1 == "00" and word2 == "00":
         return "00"
@@ -56,7 +59,6 @@ def XOR(word1, word2):
     elif word1 == "11" and word2 == "11":
         return "00"
 
-# A segunda coisa mais horrível que eu escrevi na vida
 def XNOR(word1, word2):
     if word1 == "00" and word2 == "00":
         return "11"
@@ -130,10 +132,10 @@ for i in range(16):
         intermediates[i] = XOR(data[i], keys[i])
         results[i] = XNOR(keys[i], intermediates[i]) 
     elif opcode == 2:
-        intermediates[i] = XNOR(data[i], keys[i])  # Using XNOR instead of built-in
+        intermediates[i] = XNOR(data[i], keys[i])
         results[i] = XOR(keys[i], intermediates[i]) 
     elif opcode == 3:
-        intermediates[i] = XNOR(data[i], keys[i])  # Using XNOR instead of built-in
+        intermediates[i] = XNOR(data[i], keys[i])
         results[i] = XNOR(keys[i], intermediates[i])
         
 print("Results 2:")
