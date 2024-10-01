@@ -4,8 +4,8 @@ e a informação de entrada dividida em blocos de 8 bits
 
 Defeitos:
 Se uma informação criptografada for novamente criptografada novamente com a mesma chave, o algorítimo retorna a informação original
-Vulnerável a ataque por análise estatística
-Vulnerável a ataque por "força bruta" (brute force)
+Vulnerável a ataques por análise estatística
+Vulnerável a ataques por "força bruta" (brute force)
 """
 def xor(bit1, bit2):
     if (bit1 != bit2):
@@ -51,5 +51,7 @@ descriptografar = criptografar
 
 data = "abc123"
 key = "1"
-print(criptografar(data, key))
-print(descriptografar(criptografar(data, key), key))
+criptografado = criptografar(data, key)
+print(criptografado)
+descriptografado = descriptografar(criptografado, key)
+print(descriptografado)
