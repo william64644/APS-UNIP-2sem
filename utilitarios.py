@@ -5,7 +5,7 @@ offset = 3
 
 # Time: O(n)
 # Space: O(2n)
-def shiftArray(arr, offset)
+def shiftArray(arr, offset):
     arr2 = [0]*len(arr)
     for i, num in enumerate(arr):
         pos = (i+offset) % len(arr)
@@ -33,5 +33,5 @@ def min_entropy(bit_string):
     return -math.log2(max_prob)
 
 # Example usage:
-bit_string = "11001100"
+bit_string = "010010"
 print(min_entropy(bit_string))  # Outputs the min-entropy
