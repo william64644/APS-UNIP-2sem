@@ -34,6 +34,17 @@ def byteArrStr(binArr):
         out += chr(binaryInt(bin))
     return out
 
+def strBinArr(string):
+    return (' '.join('{0:08b}'.format(ord(x), 'b') for x in string)).split()
+    
+def calcularChave(stringKey):
+    binary = strBinArr(stringKey)
+    out = binary[0]
+    for i in range(len(binary)-1):
+        out = XOR(out, binary[i+1])
+
+    return out
+
 # 00 - dividir o bloco em 1 par de 8 bytes e alternar a posição dos pares
 def alternar00(byteArr):
     if (len(byteArr) != 16):
@@ -94,10 +105,32 @@ def alternar11(byteArr):
 
     
 
-orig = "aaaabbbbccccdddd"
-orig = "era uma vez uma "
-print(orig)
-arrOrig = strByteArr(orig)
-arrAlt = alternar11(arrOrig)
-out = byteArrStr(arrAlt)
+def criptografar(entrada, chave):
+    entradaBin = strBinArr(entrada)
+    chave = calcularChave(chave)
+    criptografado = []
+    for byte in entradaBin:
+        criptografado.append(chr(binaryInt(XOR(byte, chave))))
+        
+    for i in range(7):
+        print(chave[i:i+2])
+        if (chave[i:i+2] == "00"):
+            criptografado = alternar00(criptografado)
+        elif (chave[i:i+2] == "01"):
+            criptografado = alternar01(criptografado)
+        elif (chave[i:i+2] == "10"):
+            criptografado = alternar10(criptografado)
+        elif (chave[i:i+2] == "11"):
+            criptografado = alternar11(criptografado)
+    return criptografado
+
+descriptografar = criptografar
+
+data = "0123456789abcdef"
+chave = "1234"
+
+out = criptografar(data, chave)
+print(out)
+
+out = criptografar(out, chave)
 print(out)
