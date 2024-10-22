@@ -113,7 +113,6 @@ def criptografar(entrada, chave):
         criptografado.append(chr(binaryInt(XOR(byte, chave))))
         
     for i in range(7):
-        print(chave[i:i+2])
         if (chave[i:i+2] == "00"):
             criptografado = alternar00(criptografado)
         elif (chave[i:i+2] == "01"):
@@ -127,10 +126,10 @@ def criptografar(entrada, chave):
 descriptografar = criptografar
 
 data = "0123456789abcdef"
-chave = "1234"
-
+chave = "vgbh"
+print(data)
 out = criptografar(data, chave)
-print(out)
+print(''.join(out))
 
 out = criptografar(out, chave)
-print(out)
+print(''.join(out))
