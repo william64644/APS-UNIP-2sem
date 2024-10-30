@@ -1,11 +1,7 @@
 """
 Essse é o módulo onde são definidos os métodos necessários para o processo de criptografia e descriptografia.
 """
-def hi():
-    print("HI")
 class SES:
-        
-    CARACTERES_POR_BLOCO = 4
     
     mensagem = ''
     mensagemBinario = ''
@@ -110,6 +106,8 @@ class SES:
         matriz[0][0] = buffer
 
         return matriz
+
+
     
     
     def criptografarBloco(mensagem, chave):
