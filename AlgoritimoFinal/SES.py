@@ -136,25 +136,4 @@ class SES:
             print('')
 
 
-entrada = [['11', '10', '01', '11'],
-['11', '01', '00', '00'],
-['10', '10', '01', '01'],
-['00', '10', '01', '10']]
-
-saidaEsperada = [['00', '11', '00', '11'],
-['10', '01', '01', '00'],
-['01', '10', '11', '01'],
-['10', '01', '10', '10']]
-
-saida = SES.dnl1(entrada)
-
-
-
-SES.exibirMatriz(entrada)
-print("==============")
-SES.exibirMatriz(saidaEsperada)
-print("==============")
-SES.exibirMatriz(saida)
-
-
 
