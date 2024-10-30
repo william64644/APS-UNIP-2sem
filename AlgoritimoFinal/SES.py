@@ -1,10 +1,29 @@
 """
 Essse é o módulo onde são definidos os métodos necessários para o processo de criptografia e descriptografia.
 """
-
+def hi():
+    print("HI")
 class SES:
         
     CARACTERES_POR_BLOCO = 4
+    
+    mensagem = ''
+    mensagemBinario = ''
+    
+    estado = [[]] # Armazena o estado atual durante o processo de criptografia/descriptografia
+    
+    chaveMatriz = []
+    chave1 = [[]]
+    chave2 = [[]]
+    chave3 = [[]]
+    chave4 = [[]]
+    
+    substituicoes = {
+        '00':'10',
+        '10':'00',
+        '01':'11',
+        '11':'01'
+    }
 
     # Recebe uma matriz e retorna o seu respectivo deslocamento não linear 0
     def dnl0(matriz):
@@ -91,6 +110,22 @@ class SES:
         matriz[0][0] = buffer
 
         return matriz
+    
+    
+    def criptografarBloco(mensagem, chave):
+        pass
+    
+    def descriptografarBloco(criptografado, chave):
+        pass
+    
+    
+    
+    def criptografar(mensagem, chave):
+        pass
+    
+    def descriptografar(criptografado, chave):
+        pass
+    
 
     def exibirMatriz(matriz):
         for linha in matriz:
