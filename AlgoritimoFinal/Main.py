@@ -15,3 +15,7 @@ descriptografado = s.descriptografar(criptografado, chave)
 print(descriptografado) # Exibe: ab21
 """
 
+from SES import SES
+# Usar deepcopy para passar parametros das funções por que o python passa as listas por referência e não por valor
+# Exemplo: s.chave1 = s.dnl0(deepcopy(s.chave0))
+from copy import deepcopy

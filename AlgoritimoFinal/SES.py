@@ -23,13 +23,14 @@ class SES:
     criptografadoHEX = ''
 
     # Matriz que armazena o estado atual durante o processo de criptografia/descriptografia
-    estado = [[]]
+    estado = []
     
     chaveMatriz = []
-    chave1 = [[]]
-    chave2 = [[]]
-    chave3 = [[]]
-    chave4 = [[]]
+    chave0 = []
+    chave1 = []
+    chave2 = []
+    chave3 = []
+    chave4 = []
     
     substituicoes = {
         '00':'10',
@@ -57,7 +58,6 @@ class SES:
         matriz[2][0] = matriz[3][1]
         matriz[3][1] = matriz[2][3]
         matriz[2][3] = buffer
-
         return matriz
 
     # Recebe uma matriz e retorna o seu respectivo deslocamento não linear 1
@@ -79,7 +79,6 @@ class SES:
         matriz[2][1] = matriz[3][3]
         matriz[3][3] = matriz[0][1]
         matriz[0][1] = buffer
-
         return matriz
 
     # Recebe uma matriz e retorna o seu respectivo deslocamento não linear 0 invertido
@@ -123,7 +122,6 @@ class SES:
         matriz[1][2] = matriz[1][3]
         matriz[1][3] = matriz[0][0]
         matriz[0][0] = buffer
-
         return matriz
 
     def textoParaStringBinaria(self, texto):
@@ -174,6 +172,12 @@ class SES:
         pass
 
     def calcularXORMatrizes(self, matriz1, matriz2):
+        # Exemplo:
+        #   matriz1:                      matriz2:
+        # [['10', '00', '01', '00'],    [['11', '00', '01', '10'], -Retorna-> [['01', '00', '00', '10'],
+        #  ['11', '00', '01', '00'],     ['00', '01', '11', '10'],             ['11', '01', '10', '10'],
+        #  ['11', '00', '10', '00'],     ['01', '01', '01', '10'],             ['10', '01', '11', '10'],
+        #  ['01', '01', '11', '10']]     ['10', '11', '00', '11']]             ['11', '10', '11', '01']]
         pass
 
     def stringHEXparaMatriz(self, stringHEX):
@@ -210,6 +214,3 @@ class SES:
                 print('|',end='')
             print('')
         print('+-----------+')
-
-
-
