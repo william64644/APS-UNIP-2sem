@@ -1,5 +1,5 @@
 """
-Essse é o módulo onde são definidos os métodos necessários para o processo de criptografia e descriptografia.
+Essse script realiza testes nas funções do módulo SES
 """
 
 from SES import SES as s

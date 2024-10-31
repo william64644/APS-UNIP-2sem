@@ -1,5 +1,5 @@
 """
-Essse é o módulo onde são definidos os métodos necessários para o processo de criptografia e descriptografia.
+Essse é o módulo onde são definidas as funções necessárias para o processo de criptografia e descriptografia.
 
 O processo de criptografia foi implementado de forma gráfica em uma planilha do Googe Sheets disponível em:
 https://docs.google.com/spreadsheets/d/1Q1zWAQPs8pOOpE01QaQFARhuPik_b__1QvNb1AEtX6g/edit?usp=sharing
