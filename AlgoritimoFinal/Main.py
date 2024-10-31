@@ -1,5 +1,5 @@
 """
-Esse é o programa que será utilizado para usar o módulo SES na pŕatica
+Esse é o programa que será utilizado para usar o módulo SES na prática
 
 Exemplo de uso hipotético:
 
