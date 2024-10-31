@@ -1,4 +1,9 @@
-def matrizSheetsParaMatrixPython(matrizSheets):
+def matrizSheetsParaMatrixPython():
+    
+    matrizSheets = """00	11	00	11
+10	01	01	00
+01	10	11	01
+10	01	10	10"""
     matrizSheets = matrizSheets.replace('\t', ' ')
 
     print('[', end='')
@@ -9,10 +14,7 @@ def matrizSheetsParaMatrixPython(matrizSheets):
     print(']')
 
 
-matrizSheets = """00	11	00	11
-10	01	01	00
-01	10	11	01
-10	01	10	10"""
 
 
-matrizSheetsParaMatrixPython(matrizSheets)
+
+matrizSheetsParaMatrixPython()
