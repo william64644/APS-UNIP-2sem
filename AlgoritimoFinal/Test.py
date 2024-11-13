@@ -89,6 +89,17 @@ def test_textoParaStringBinaria():
         return True
 
 
+def test_stringHEXparaStringBinaria():
+    entrada = "42DA9EED"
+    saidaEsperada = "01000010110110101001111011101101"
+    saida = s.stringHEXparaStringBinaria(entrada)
+    if saida == None:
+        return saida
+    if saida == saidaEsperada:
+        return False
+    else:
+        return True
+
 def test_stringBinariaParaTexto():
     entrada = "01100001011000100110001101100100"
     saidaEsperada = "abcd"
@@ -226,7 +237,7 @@ testes = [
     test_adicionarZerosNecessarios, test_removerZerosNecessarios,
     test_stringBinariaParaBlocos, test_blocoParaMatriz, test_matrizParaBloco,
     test_matrizParaStringHEX, test_calcularXORMatrizes,
-    test_stringHEXparaMatriz
+    test_stringHEXparaMatriz, test_stringHEXparaStringBinaria
 ]
 
 for teste in testes:

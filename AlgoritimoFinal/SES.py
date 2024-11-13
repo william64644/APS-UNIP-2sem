@@ -125,68 +125,57 @@ class SES:
         return matriz
 
     def textoParaStringBinaria(self, texto):
-        # Exemplo: "abcd" -Retorna-> "01100001011000100110001101100100"
-        pass
+        # Converte cada caractere para seu valor binário de 8 bits
+        return ''.join(format(ord(c), '08b') for c in texto)
 
     def stringBinariaParaTexto(self, stringBinaria):
-        # Exemplo: "01100001011000100110001101100100" -Retorna-> "abcd"
-        pass
-    
+        # Divide a string binária em blocos de 8 bits e converte cada bloco para caractere ASCII
+        caracteres = [stringBinaria[i:i+8]
+                      for i in range(0, len(stringBinaria), 8)]
+        return ''.join(chr(int(c, 2)) for c in caracteres)
+
+    def stringHEXparaStringBinaria(self, stringHEX):
+        # Converte cada caractere hexadecimal para seu valor binário de 4 bits
+        return ''.join(format(int(c, 16), '04b') for c in stringHEX)
+
     def adicionarZerosNecessarios(self, stringBinaria):
-        # Exemplo: "011000010110001001100011" -Retorna-> "00000000011000010110001001100011"
-        # O comprimento da string binária retornada deve ser um múltiplo de 32
-        # Adicione quantos zeros à esquerda forem necessários para isso
-        pass
-    
+        # Calcula quantos zeros são necessários para o comprimento ser múltiplo de 32
+        complemento = (32 - len(stringBinaria) % 32) % 32
+        return '0' * complemento + stringBinaria
+
     def removerZerosNecessarios(self, stringBinaria):
-        # Exemplo: "00000000011000010110001001100011" -Retorna-> "011000010110001001100011"
-        # Dica: remover os primeiros 8 bits enquanto os primeiros 8 bits forem iguais a '00000000'
-        pass
+        # Remove blocos de 8 bits iguais a '00000000' no início da string
+        while stringBinaria.startswith('00000000'):
+            stringBinaria = stringBinaria[8:]
+        return stringBinaria
 
     def stringBinariaParaBlocos(self, stringBinaria):
-        # Exemplo: "0110000101100010011000110110010001100101011001100110011101101000"
-        # -Retorna-> ["01100001011000100110001101100100", "01100101011001100110011101101000"]
-        # (Retornar a string binária dividida em blocos de 32 bits)
-        pass
-    
+        # Divide a string em blocos de 32 bits
+        return [stringBinaria[i:i+32] for i in range(0, len(stringBinaria), 32)]
+
     def blocoParaMatriz(self, bloco):
-        # Exemplo: "01100011011001000011000100110010" -Retorna-> [['01', '10', '00', '11'],
-        #                                                         ['01', '10', '01', '00'],
-        #                                                         ['00', '11', '00', '01'],
-        #                                                         ['00', '11', '00', '10']]
-        pass
+        # Divide o bloco de 32 bits em uma matriz 4x4 com elementos de 2 bits
+        return [[bloco[i+j:i+j+2] for j in range(0, 8, 2)] for i in range(0, 32, 8)]
 
     def matrizParaBloco(self, matriz):
-        # Exemplo: [['01', '10', '00', '11'], -Retorna-> "01100011011001000011000100110010"
-        #          ['01', '10', '01', '00'],
-        #          ['00', '11', '00', '01'],
-        #          ['00', '11', '00', '10']]
-        pass
+        # Converte a matriz 4x4 de elementos de 2 bits em uma string binária de 32 bits
+        return ''.join(''.join(linha) for linha in matriz)
 
     def matrizParaStringHEX(self, matriz):
-        # Exemplo:
-        # [['01', '00', '00', '10'],
-        # ['11', '01', '10', '10'],
-        # ['10', '01', '11', '10'],
-        # ['11', '10', '11', '01']] -Retorna-> "42DA9EED"
-        pass
+        # Converte cada linha da matriz de 4 elementos de 2 bits em um valor hexadecimal
+        return ''.join(format(int(''.join(linha), 2), 'X') for linha in matriz)
 
     def calcularXORMatrizes(self, matriz1, matriz2):
-        # Exemplo:
-        #   matriz1:                      matriz2:
-        # [['10', '00', '01', '00'],    [['11', '00', '01', '10'], -Retorna-> [['01', '00', '00', '10'],
-        #  ['11', '00', '01', '00'],     ['00', '01', '11', '10'],             ['11', '01', '10', '10'],
-        #  ['11', '00', '10', '00'],     ['01', '01', '01', '10'],             ['10', '01', '11', '10'],
-        #  ['01', '01', '11', '10']]     ['10', '11', '00', '11']]             ['11', '10', '11', '01']]
-        pass
+        # Realiza operação XOR elemento a elemento entre duas matrizes 4x4 de elementos de 2 bits
+        return [[format(int(matriz1[i][j], 2) ^ int(matriz2[i][j], 2), '02b')
+                 for j in range(4)] for i in range(4)]
 
     def stringHEXparaMatriz(self, stringHEX):
-        # Exemplo:
-        # "42DA9EED" -Retorna-> [['01', '00', '00', '10'],
-        #                       ['11', '01', '10', '10'],
-        #                       ['10', '01', '11', '10'],
-        #                       ['11', '10', '11', '01']]
-        pass
+        # Usa stringHEXparaStringBinaria para converter a string hexadecimal para binário
+        stringBinaria = self.stringHEXparaStringBinaria(stringHEX)
+        # Divide a string binária em uma matriz 4x4 de elementos de 2 bits
+        return [[stringBinaria[i+j:i+j+2] for j in range(0, 8, 2)] for i in range(0, 32, 8)]
+
 
     def criptografarMatriz(self, matrizMensagem):
         # (Implementar após as outras funções)
