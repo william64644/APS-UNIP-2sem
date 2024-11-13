@@ -26,11 +26,7 @@ class SES:
     estado = []
     
     chaveMatriz = []
-    chave0 = []
-    chave1 = []
-    chave2 = []
-    chave3 = []
-    chave4 = []
+
     
     substituicoes = {
         '00':'10',
@@ -176,9 +172,28 @@ class SES:
         # Divide a string binária em uma matriz 4x4 de elementos de 2 bits
         return [[stringBinaria[i+j:i+j+2] for j in range(0, 8, 2)] for i in range(0, 32, 8)]
 
+    def comprimirMatrizes(self, matrizes: list[list]):
+        matriz = matrizes[0]
+        for i in range(1, len(matrizes)):
+            matriz = self.calcularXORMatrizes(matriz, matrizes[i])
+        return matriz
 
-    def criptografarMatriz(self, matrizMensagem):
+    def stringParaMatrizes(self, string):
+        stringBinaria = self.textoParaStringBinaria(string)
+        stringBinaria = self.adicionarZerosNecessarios(stringBinaria)
+        blocos = self.stringBinariaParaBlocos(stringBinaria)
+        matrizes = []
+        for bloco in blocos:
+            matrizes.append(self.blocoParaMatriz(bloco))
+        return matrizes
+
+    def criptografarMatriz(self, matrizMensagem, matrizChave):
         # (Implementar após as outras funções)
+        chave0 = matrizChave
+        chave1 = self.dnl0(chave0)
+        chave2 = self.dnl0(chave1)
+        chave3 = self.dnl0(chave2)
+        chave4 = self.dnl0(chave3)
         pass
 
     def descriptografarMatriz(self, matrizCriptografada):
