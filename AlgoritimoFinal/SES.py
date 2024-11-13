@@ -13,21 +13,7 @@ O processo de criptografia foi implementado de forma gráfica em uma planilha do
 https://docs.google.com/spreadsheets/d/1Q1zWAQPs8pOOpE01QaQFARhuPik_b__1QvNb1AEtX6g/edit?usp=sharing
 """
 class SES:
-    
-    mensagem = ''
-    mensagemBinario = ''
-    
-    chave = ''
-    chaveBinario = ''
 
-    criptografadoHEX = ''
-
-    # Matriz que armazena o estado atual durante o processo de criptografia/descriptografia
-    estado = []
-    
-    chaveMatriz = []
-
-    
     substituicoes = {
         '00':'10',
         '10':'00',
@@ -245,6 +231,12 @@ class SES:
                 bits_resultantes = self.xor2Bits(bits_resultantes, elemento)
             bits_dnln.append(bits_resultantes)
         return ''.join(bits_dnln)
+
+    def criptografar(self, mensagem, chave):
+        pass
+
+    def descriptografar(self, criptografado, chave):
+        pass
 
     def exibirMatriz(self, matriz):
         # (Apenas para debug)
