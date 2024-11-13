@@ -22,7 +22,10 @@ from copy import deepcopy
 
 s = SES()
 
-mensagem = "cd12a"
+chave = "cd12"
 
-matriz = s.stringParaMatrizes(mensagem)
-print(matriz)
+chaveMatriz = s.comprimirMatrizes(s.stringParaMatrizes(chave))
+
+
+bits = s.gerarBitsDnln(chaveMatriz)
+print(bits)

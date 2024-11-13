@@ -122,22 +122,35 @@ class SES:
 
     def textoParaStringBinaria(self, texto):
         # Converte cada caractere para seu valor binário de 8 bits
-        return ''.join(format(ord(c), '08b') for c in texto)
+        binario_completo = ''
+        for caractere in texto:
+            binario_8bits = format(ord(caractere), '08b')
+            binario_completo += binario_8bits
+        return binario_completo
 
     def stringBinariaParaTexto(self, stringBinaria):
         # Divide a string binária em blocos de 8 bits e converte cada bloco para caractere ASCII
-        caracteres = [stringBinaria[i:i+8]
-                      for i in range(0, len(stringBinaria), 8)]
-        return ''.join(chr(int(c, 2)) for c in caracteres)
+        caracteres = []
+        for i in range(0, len(stringBinaria), 8):
+            bloco_8bits = stringBinaria[i:i+8]
+            caractere = chr(int(bloco_8bits, 2))
+            caracteres.append(caractere)
+        return ''.join(caracteres)
 
     def stringHEXparaStringBinaria(self, stringHEX):
         # Converte cada caractere hexadecimal para seu valor binário de 4 bits
-        return ''.join(format(int(c, 16), '04b') for c in stringHEX)
+        binario_completo = ''
+        for caractere_hex in stringHEX:
+            binario_4bits = format(int(caractere_hex, 16), '04b')
+            binario_completo += binario_4bits
+        return binario_completo
 
     def adicionarZerosNecessarios(self, stringBinaria):
         # Calcula quantos zeros são necessários para o comprimento ser múltiplo de 32
-        complemento = (32 - len(stringBinaria) % 32) % 32
-        return '0' * complemento + stringBinaria
+        comprimento_atual = len(stringBinaria)
+        complemento = (32 - comprimento_atual % 32) % 32
+        zeros_necessarios = '0' * complemento
+        return zeros_necessarios + stringBinaria
 
     def removerZerosNecessarios(self, stringBinaria):
         # Remove blocos de 8 bits iguais a '00000000' no início da string
@@ -147,74 +160,106 @@ class SES:
 
     def stringBinariaParaBlocos(self, stringBinaria):
         # Divide a string em blocos de 32 bits
-        return [stringBinaria[i:i+32] for i in range(0, len(stringBinaria), 32)]
+        blocos_32bits = []
+        for i in range(0, len(stringBinaria), 32):
+            bloco = stringBinaria[i:i+32]
+            blocos_32bits.append(bloco)
+        return blocos_32bits
 
     def blocoParaMatriz(self, bloco):
         # Divide o bloco de 32 bits em uma matriz 4x4 com elementos de 2 bits
-        return [[bloco[i+j:i+j+2] for j in range(0, 8, 2)] for i in range(0, 32, 8)]
+        matriz = []
+        for i in range(0, 32, 8):
+            linha = [bloco[i+j:i+j+2] for j in range(0, 8, 2)]
+            matriz.append(linha)
+        return matriz
 
     def matrizParaBloco(self, matriz):
         # Converte a matriz 4x4 de elementos de 2 bits em uma string binária de 32 bits
-        return ''.join(''.join(linha) for linha in matriz)
+        binario_completo = ''
+        for linha in matriz:
+            binario_completo += ''.join(linha)
+        return binario_completo
 
     def matrizParaStringHEX(self, matriz):
         # Converte cada linha da matriz de 4 elementos de 2 bits em um valor hexadecimal
-        return ''.join(format(int(''.join(linha), 2), 'X') for linha in matriz)
+        stringHEX = ''
+        for linha in matriz:
+            bits_linha = ''.join(linha)
+            valor_hex = format(int(bits_linha, 2), 'X')
+            stringHEX += valor_hex
+        return stringHEX
 
     def calcularXORMatrizes(self, matriz1, matriz2):
         # Realiza operação XOR elemento a elemento entre duas matrizes 4x4 de elementos de 2 bits
-        return [[format(int(matriz1[i][j], 2) ^ int(matriz2[i][j], 2), '02b')
-                 for j in range(4)] for i in range(4)]
+        matriz_resultante = []
+        for i in range(4):
+            linha_xor = []
+            for j in range(4):
+                xor_bits = format(int(matriz1[i][j], 2) ^ int(
+                    matriz2[i][j], 2), '02b')
+                linha_xor.append(xor_bits)
+            matriz_resultante.append(linha_xor)
+        return matriz_resultante
 
     def stringHEXparaMatriz(self, stringHEX):
         # Usa stringHEXparaStringBinaria para converter a string hexadecimal para binário
         stringBinaria = self.stringHEXparaStringBinaria(stringHEX)
         # Divide a string binária em uma matriz 4x4 de elementos de 2 bits
-        return [[stringBinaria[i+j:i+j+2] for j in range(0, 8, 2)] for i in range(0, 32, 8)]
-
-    def comprimirMatrizes(self, matrizes: list[list]):
-        matriz = matrizes[0]
-        for i in range(1, len(matrizes)):
-            matriz = self.calcularXORMatrizes(matriz, matrizes[i])
+        matriz = []
+        for i in range(0, 32, 8):
+            linha = [stringBinaria[i+j:i+j+2] for j in range(0, 8, 2)]
+            matriz.append(linha)
         return matriz
+
+    def comprimirMatrizes(self, matrizes):
+        matriz_resultante = matrizes[0]
+        for matriz in matrizes[1:]:
+            matriz_resultante = self.calcularXORMatrizes(
+                matriz_resultante, matriz)
+        return matriz_resultante
 
     def stringParaMatrizes(self, string):
         stringBinaria = self.textoParaStringBinaria(string)
         stringBinaria = self.adicionarZerosNecessarios(stringBinaria)
         blocos = self.stringBinariaParaBlocos(stringBinaria)
+
         matrizes = []
         for bloco in blocos:
-            matrizes.append(self.blocoParaMatriz(bloco))
+            matriz = self.blocoParaMatriz(bloco)
+            matrizes.append(matriz)
         return matrizes
 
-    def criptografarMatriz(self, matrizMensagem, matrizChave):
-        # (Implementar após as outras funções)
-        chave0 = matrizChave
-        chave1 = self.dnl0(chave0)
-        chave2 = self.dnl0(chave1)
-        chave3 = self.dnl0(chave2)
-        chave4 = self.dnl0(chave3)
-        pass
+    def xor2Bits(self, bitString1, bitString2):
+        resultado_xor = ''
+        for k in range(2):
+            bit_xor = str(int(bitString1[k]) ^ int(bitString2[k]))
+            resultado_xor += bit_xor
+        return resultado_xor
 
-    def descriptografarMatriz(self, matrizCriptografada):
-        # (Implementar após as outras funções)
-        pass
+    def gerarBitsDnln(self, matriz):
+        bits_dnln = []
+        for linha in matriz:
+            bits_resultantes = linha[0]
+            for elemento in linha[1:]:
+                bits_resultantes = self.xor2Bits(bits_resultantes, elemento)
+            bits_dnln.append(bits_resultantes)
+        return ''.join(bits_dnln)
 
-    def criptografar(self, mensagem, chave):
-        # (Implementar após as outras funções)
-        pass
-    
-    def descriptografar(self, criptografado, chave):
-        # (Implementar após as outras funções)
-        pass
-    
     def exibirMatriz(self, matriz):
         # (Apenas para debug)
         print('+-----------+')
         for linha in matriz:
-            print('|',end='')
+            print('|', end='')
             for byte in linha:
                 print(byte, end='')
-                print('|',end='')
+                print('|', end='')
             print('')
         print('+-----------+')
+
+    def exibirMatrizes(self, matrizes):
+        # (Apenas para debug)
+        for i, matriz in enumerate(matrizes, start=1):
+            print(f"Matriz {i}:")
+            self.exibirMatriz(matriz)
+            print('')
