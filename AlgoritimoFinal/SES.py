@@ -12,7 +12,15 @@ matriz: Uma lista contendo 4 listas, cada uma contendo 4 pares de 2 bits. Exempl
 O processo de criptografia foi implementado de forma gráfica em uma planilha do Googe Sheets disponível em:
 https://docs.google.com/spreadsheets/d/1Q1zWAQPs8pOOpE01QaQFARhuPik_b__1QvNb1AEtX6g/edit?usp=sharing
 """
+
+from copy import deepcopy
+
 class SES:
+
+    MATRIZ_VAZIA = [['00', '00', '00', '00'],
+                    ['00', '00', '00', '00'],
+                    ['00', '00', '00', '00'],
+                    ['00', '00', '00', '00']]
 
     substituicoes = {
         '00':'10',
@@ -21,8 +29,16 @@ class SES:
         '11':'01'
     }
 
+    substituicoesReverso = {
+        '10': '00',
+        '00': '10',
+        '11': '01',
+        '01': '11'
+    }
+
     # Recebe uma matriz e retorna o seu respectivo deslocamento não linear 0
     def dnl0(self, matriz):
+        matriz = deepcopy(matriz)  # Não alterar a matriz de origem
         buffer = matriz[0][0]
         matriz[0][0] = matriz[1][2]
         matriz[1][2] = matriz[3][3]
@@ -44,11 +60,12 @@ class SES:
 
     # Recebe uma matriz e retorna o seu respectivo deslocamento não linear 1
     def dnl1(self, matriz):
+        matriz = deepcopy(matriz)  # Não alterar a matriz de origem
         buffer = matriz[0][0]
         matriz[0][0] = matriz[1][3]
         matriz[1][3] = matriz[1][2]
         matriz[1][2] = matriz[1][1]
-        matriz[1][2] = matriz[2][2]
+        matriz[1][1] = matriz[2][2]
         matriz[2][2] = matriz[0][3]
         matriz[0][3] = matriz[1][0]
         matriz[1][0] = matriz[3][1]
@@ -65,6 +82,7 @@ class SES:
 
     # Recebe uma matriz e retorna o seu respectivo deslocamento não linear 0 invertido
     def dnl0reverso(self, matriz):
+        matriz = deepcopy(matriz)  # Não alterar a matriz de origem
         buffer = matriz[2][3]
         matriz[2][3] = matriz[3][1]
         matriz[3][1] = matriz[2][0]
@@ -87,6 +105,7 @@ class SES:
 
     # Recebe uma matriz e retorna o seu respectivo deslocamento não linear 1 invertido
     def dnl1reverso(self, matriz):
+        matriz = deepcopy(matriz)  # Não alterar a matriz de origem
         buffer = matriz[0][1]
         matriz[0][1] = matriz[3][3]
         matriz[3][3] = matriz[2][1]
@@ -106,6 +125,28 @@ class SES:
         matriz[0][0] = buffer
         return matriz
 
+    def dnln(self, matriz, bits):
+        matriz = deepcopy(matriz)  # Não alterar a matriz de origem
+        for bit in bits:
+            if bit == '0':
+                matriz = self.dnl0(matriz)
+            elif bit == '1':
+                matriz = self.dnl1(matriz)
+            else:
+                print("Erro: Situação não esperada em DNLN")
+        return matriz
+
+    def dnlnReverso(self, matriz, bits):
+        matriz = deepcopy(matriz)  # Não alterar a matriz de origem
+        for bit in reversed(bits):
+            if bit == '0':
+                matriz = self.dnl0reverso(matriz)
+            elif bit == '1':
+                matriz = self.dnl1reverso(matriz)
+            else:
+                print("Erro: Situação não esperada em DNLN Reverso")
+        return matriz
+
     def textoParaStringBinaria(self, texto):
         # Converte cada caractere para seu valor binário de 8 bits
         binario_completo = ''
@@ -118,8 +159,8 @@ class SES:
         # Divide a string binária em blocos de 8 bits e converte cada bloco para caractere ASCII
         caracteres = []
         for i in range(0, len(stringBinaria), 8):
-            bloco_8bits = stringBinaria[i:i+8]
-            caractere = chr(int(bloco_8bits, 2))
+            bloco8bits = stringBinaria[i:i+8]
+            caractere = chr(int(bloco8bits, 2))
             caracteres.append(caractere)
         return ''.join(caracteres)
 
@@ -131,18 +172,12 @@ class SES:
             binario_completo += binario_4bits
         return binario_completo
 
-    def adicionarZerosNecessarios(self, stringBinaria):
-        # Calcula quantos zeros são necessários para o comprimento ser múltiplo de 32
-        comprimento_atual = len(stringBinaria)
-        complemento = (32 - comprimento_atual % 32) % 32
-        zeros_necessarios = '0' * complemento
-        return zeros_necessarios + stringBinaria
+    def adicionarNull(self, string):
+        padding = (4 - len(string) % 4) % 4
+        return string + '\0' * padding
 
-    def removerZerosNecessarios(self, stringBinaria):
-        # Remove blocos de 8 bits iguais a '00000000' no início da string
-        while stringBinaria.startswith('00000000'):
-            stringBinaria = stringBinaria[8:]
-        return stringBinaria
+    def removerNull(self, string):
+        return string.replace('\0', '')
 
     def stringBinariaParaBlocos(self, stringBinaria):
         # Divide a string em blocos de 32 bits
@@ -151,6 +186,14 @@ class SES:
             bloco = stringBinaria[i:i+32]
             blocos_32bits.append(bloco)
         return blocos_32bits
+
+    def stringHexParaBlocosHex(self, stringhex):
+        # Divide a string em blocos de 8 Hexadecimais
+        blocos_8 = []
+        for i in range(0, len(stringhex), 8):
+            bloco = stringhex[i:i+8]
+            blocos_8.append(bloco)
+        return blocos_8
 
     def blocoParaMatriz(self, bloco):
         # Divide o bloco de 32 bits em uma matriz 4x4 com elementos de 2 bits
@@ -168,13 +211,21 @@ class SES:
         return binario_completo
 
     def matrizParaStringHEX(self, matriz):
-        # Converte cada linha da matriz de 4 elementos de 2 bits em um valor hexadecimal
+        # Converte cada linha da matriz de 4 elementos de 2 bits em um valor hexadecimal com 2 dígitos
         stringHEX = ''
         for linha in matriz:
             bits_linha = ''.join(linha)
-            valor_hex = format(int(bits_linha, 2), 'X')
+            valor_hex = format(int(bits_linha, 2), '02X')  # Garante 2 dígitos com zero à esquerda
             stringHEX += valor_hex
         return stringHEX
+
+
+    def xor2Bits(self, bitString1, bitString2):
+        resultado_xor = ''
+        for k in range(2):
+            bit_xor = str(int(bitString1[k]) ^ int(bitString2[k]))
+            resultado_xor += bit_xor
+        return resultado_xor
 
     def calcularXORMatrizes(self, matriz1, matriz2):
         # Realiza operação XOR elemento a elemento entre duas matrizes 4x4 de elementos de 2 bits
@@ -182,16 +233,29 @@ class SES:
         for i in range(4):
             linha_xor = []
             for j in range(4):
-                xor_bits = format(int(matriz1[i][j], 2) ^ int(
-                    matriz2[i][j], 2), '02b')
+                xor_bits = self.xor2Bits(matriz1[i][j], matriz2[i][j])
                 linha_xor.append(xor_bits)
             matriz_resultante.append(linha_xor)
         return matriz_resultante
 
+    def substituirMatriz(self, matriz):
+        matriz = deepcopy(matriz)  # Não alterar a matriz de origem
+        novaMatriz = self.MATRIZ_VAZIA
+        for i, linha in enumerate(matriz):
+            for j, bits in enumerate(linha):
+                novaMatriz[i][j] = self.substituicoes[bits]
+        return novaMatriz
+
+    def substituirMatrizReverso(self, matriz):
+        matriz = deepcopy(matriz)  # Não alterar a matriz de origem
+        novaMatriz = self.MATRIZ_VAZIA
+        for i, linha in enumerate(matriz):
+            for j, bits in enumerate(linha):
+                novaMatriz[i][j] = self.substituicoesReverso[bits]
+        return novaMatriz
+
     def stringHEXparaMatriz(self, stringHEX):
-        # Usa stringHEXparaStringBinaria para converter a string hexadecimal para binário
         stringBinaria = self.stringHEXparaStringBinaria(stringHEX)
-        # Divide a string binária em uma matriz 4x4 de elementos de 2 bits
         matriz = []
         for i in range(0, 32, 8):
             linha = [stringBinaria[i+j:i+j+2] for j in range(0, 8, 2)]
@@ -207,7 +271,6 @@ class SES:
 
     def stringParaMatrizes(self, string):
         stringBinaria = self.textoParaStringBinaria(string)
-        stringBinaria = self.adicionarZerosNecessarios(stringBinaria)
         blocos = self.stringBinariaParaBlocos(stringBinaria)
 
         matrizes = []
@@ -215,13 +278,6 @@ class SES:
             matriz = self.blocoParaMatriz(bloco)
             matrizes.append(matriz)
         return matrizes
-
-    def xor2Bits(self, bitString1, bitString2):
-        resultado_xor = ''
-        for k in range(2):
-            bit_xor = str(int(bitString1[k]) ^ int(bitString2[k]))
-            resultado_xor += bit_xor
-        return resultado_xor
 
     def gerarBitsDnln(self, matriz):
         bits_dnln = []
@@ -232,11 +288,89 @@ class SES:
             bits_dnln.append(bits_resultantes)
         return ''.join(bits_dnln)
 
-    def criptografar(self, mensagem, chave):
-        pass
+    def expandirChave0(self, chave0):
+        chaves = []
+        chaves.append(self.dnl0(chave0))
+        for i in range(3):
+            chaves.append(self.dnl0(chaves[i]))
+        resultadoDnl0 = deepcopy(chaves)
+        for i, matriz in enumerate(chaves):
+            chaves[i] = self.calcularXORMatrizes(chaves[i], chave0)
+            chaves[i] = self.dnl1(chaves[i])
+            chaves[i] = self.calcularXORMatrizes(chaves[i], resultadoDnl0[i])
+        return chaves
 
-    def descriptografar(self, criptografado, chave):
-        pass
+    def criptografarMatriz(self, matrizMensagem, chaves, chave0):
+        estado = matrizMensagem
+        estado = self.substituirMatriz(estado)
+        estado = self.dnl0(estado)
+        estado = self.calcularXORMatrizes(estado, chaves[0])
+        estado = self.substituirMatriz(estado)
+        estado = self.dnl1(estado)
+        estado = self.calcularXORMatrizes(estado, chaves[1])
+        estado = self.substituirMatriz(estado)
+        estado = self.dnl0(estado)
+        estado = self.calcularXORMatrizes(estado, chaves[2])
+        estado = self.substituirMatriz(estado)
+        estado = self.dnl1(estado)
+        estado = self.calcularXORMatrizes(estado, chaves[3])
+        bitsDnln = self.gerarBitsDnln(chave0)
+        estado = self.dnln(estado, bitsDnln)
+        return estado
+
+    def descriptografarMatriz(self, matrizCriptografada, chaves, chave0):
+        estado = deepcopy(matrizCriptografada)
+        bitsDnln = self.gerarBitsDnln(chave0)
+        estado = self.dnlnReverso(estado, bitsDnln)
+        estado = self.calcularXORMatrizes(estado, chaves[3])
+        estado = self.dnl1reverso(estado)
+        estado = self.substituirMatrizReverso(estado)
+        estado = self.calcularXORMatrizes(estado, chaves[2])
+        estado = self.dnl0reverso(estado)
+        estado = self.substituirMatrizReverso(estado)
+        estado = self.calcularXORMatrizes(estado, chaves[1])
+        estado = self.dnl1reverso(estado)
+        estado = self.substituirMatrizReverso(estado)
+        estado = self.calcularXORMatrizes(estado, chaves[0])
+        estado = self.dnl0reverso(estado)
+        estado = self.substituirMatrizReverso(estado)
+        return estado
+
+    def criptografar(self, mensagem, chave = '0000'):
+        mensagem = self.adicionarNull(mensagem)
+        chave = self.adicionarNull(chave)
+        mensagemMatrizes = self.stringParaMatrizes(mensagem)
+        chave0 = self.comprimirMatrizes(self.stringParaMatrizes(chave))
+        chaves = self.expandirChave0(chave0)
+
+        criptografadoMatrizes = []
+        for mensagemMatriz in mensagemMatrizes:
+            criptografadoMatrizes.append(
+                self.criptografarMatriz(mensagemMatriz, chaves, chave0))
+
+        mensagemCriptografada = ""
+        for criptografadoMatriz in criptografadoMatrizes:
+            mensagemCriptografada += self.matrizParaStringHEX(
+                criptografadoMatriz)
+
+        return mensagemCriptografada
+
+    def descriptografar(self, hexCriptografado, chave ='0000'):
+        chave = self.adicionarNull(chave)
+        chave0 = self.comprimirMatrizes(self.stringParaMatrizes(chave))
+        chaves = self.expandirChave0(chave0)
+        blocosCriptografados = self.stringHexParaBlocosHex(hexCriptografado)
+        blocosBinarios = []
+        for blocoCriptografado in blocosCriptografados:
+            matrizCriptografada = self.stringHEXparaMatriz(blocoCriptografado)
+            matrizDescriptografada = self.descriptografarMatriz(
+                matrizCriptografada, chaves, chave0)
+            blocosBinarios.append(self.matrizParaBloco(matrizDescriptografada))
+
+        mensagem = ""
+        for bloco in blocosBinarios:
+            mensagem += self.stringBinariaParaTexto(bloco)
+        return mensagem
 
     def exibirMatriz(self, matriz):
         # (Apenas para debug)

@@ -22,10 +22,12 @@ from copy import deepcopy
 
 s = SES()
 
-chave = "cd12"
+chave = "asd"
+mensagem = "Will2: asd"
 
-chaveMatriz = s.comprimirMatrizes(s.stringParaMatrizes(chave))
+crip = s.criptografar(mensagem, chave)
 
+print(crip)
 
-bits = s.gerarBitsDnln(chaveMatriz)
-print(bits)
+decrip = s.descriptografar(crip, chave)
+print(decrip)
