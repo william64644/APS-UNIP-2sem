@@ -1,4 +1,10 @@
-import from main import *
+"""
+
+    DESCONTINUADO
+
+"""
+
+from main import alternar00
 
 # Using the standart of 0=success and 1=failure from the C language
 

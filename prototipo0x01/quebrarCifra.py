@@ -1,3 +1,9 @@
+"""
+
+    DESCONTINUADO
+
+"""
+
 import os
 from prettytable import PrettyTable
 

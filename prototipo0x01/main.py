@@ -1,4 +1,10 @@
 """
+
+    DESCONTINUADO
+
+"""
+
+"""
 Algorítimo baseado em um simples XOR entre a chave
 e a informação de entrada dividida em blocos de 8 bits
 

@@ -1,4 +1,10 @@
 """
+
+    DESCONTINUADO
+
+"""
+
+"""
 CARACTERÍSTICAS DO ALGORÍTIMO
 Cifra de blocos de 16 bytes
 bytes são embaralhados de acordo com a chave para aumentar a entropia
