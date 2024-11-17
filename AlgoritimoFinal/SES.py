@@ -336,7 +336,9 @@ class SES:
         estado = self.substituirMatrizReverso(estado)
         return estado
 
-    def criptografar(self, mensagem, chave = '0000'):
+    def criptografar(self, mensagem, chave):
+        if (chave == ""):
+            return mensagem
         mensagem = self.adicionarNull(mensagem)
         chave = self.adicionarNull(chave)
         mensagemMatrizes = self.stringParaMatrizes(mensagem)
@@ -355,7 +357,9 @@ class SES:
 
         return mensagemCriptografada
 
-    def descriptografar(self, hexCriptografado, chave ='0000'):
+    def descriptografar(self, hexCriptografado, chave):
+        if (chave == ""):
+            return hexCriptografado
         chave = self.adicionarNull(chave)
         chave0 = self.comprimirMatrizes(self.stringParaMatrizes(chave))
         chaves = self.expandirChave0(chave0)
@@ -370,6 +374,8 @@ class SES:
         mensagem = ""
         for bloco in blocosBinarios:
             mensagem += self.stringBinariaParaTexto(bloco)
+            
+        mensagem = self.removerNull(mensagem)
         return mensagem
 
     def exibirMatriz(self, matriz):

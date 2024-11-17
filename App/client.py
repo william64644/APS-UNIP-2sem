@@ -3,7 +3,8 @@ import threading
 import tkinter as tk
 from tkinter import scrolledtext
 import sys
-sys.path.append('../AlgoritimoFinal/')
+sys.path.append('AlgoritimoFinal/')
+#sys.path.append("/home/night/Documents/UNIP/APS-UNIP-2sem/AlgoritimoFinal/")
 from SES import SES
 
 # Configuração do servidor
@@ -16,12 +17,12 @@ class ClienteChat:
     def __init__(self, root):
         self.root = root
         self.root.title("Mensageiro SES")
-        self.root.geometry("500x600")
+        self.root.geometry("500x540")
         self.root.config(bg="#96d5ff")
 
-        self.fonte = ("Arial", 12)
-        self.fonteRotulo = ("Arial", 12, "bold")
-        self.fonteBotao = ("Arial", 10, "bold")
+        self.fonte = ("Arial", 22)
+        self.fonteLabel = ("Arial", 22, "bold")
+        self.fonteBotao = ("Arial", 20, "bold")
 
         self.corFundo = "#96d5ff"
         self.inputFundo = "#ffffff"
@@ -30,18 +31,21 @@ class ClienteChat:
         self.botaoTexto = "#ffffff"
 
         # Campos de Nome e Senha
-        self.rotuloNome = tk.Label(self.root, text="Nome:", font=self.fonteRotulo, bg=self.corFundo, fg=self.corTexto)
-        self.rotuloNome.pack(padx=10, pady=(10, 0), anchor='w')
+        self.labelNome = tk.Label(
+            self.root, text="Nome:", font=self.fonteLabel, bg=self.corFundo, fg=self.corTexto)
+        self.labelNome.pack(padx=10, pady=(10, 0), anchor='w')
         self.entradaNome = tk.Entry(self.root, font=self.fonte, bg=self.inputFundo, fg=self.corTexto)
         self.entradaNome.pack(padx=10, pady=(0, 10), fill=tk.X)
 
-        self.rotuloSenha = tk.Label(self.root, text="Senha:", font=self.fonteRotulo, bg=self.corFundo, fg=self.corTexto)
-        self.rotuloSenha.pack(padx=10, pady=(10, 0), anchor='w')
+        self.labelSenha = tk.Label(
+            self.root, text="Senha:", font=self.fonteLabel, bg=self.corFundo, fg=self.corTexto)
+        self.labelSenha.pack(padx=10, pady=(10, 0), anchor='w')
         self.entradaSenha = tk.Entry(self.root, font=self.fonte, bg=self.inputFundo, fg=self.corTexto, show="*")
         self.entradaSenha.pack(padx=10, pady=(0, 10), fill=tk.X)
 
         # Área de chat (ocupa a maior parte do espaço)
-        self.areaChat = scrolledtext.ScrolledText(self.root, state='disabled', wrap='word', font=self.fonte, bg="#f4f4f4", fg=self.corTexto)
+        self.areaChat = scrolledtext.ScrolledText(
+            self.root, state='disabled', wrap='word', font=self.fonte, bg="#f4f4f4", fg=self.corTexto, height=8)
         self.areaChat.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
 
         # Frame para entrada de mensagem e botão Enviar (sempre visível)
@@ -103,6 +107,7 @@ class ClienteChat:
         self.areaChat.insert(tk.END, mensagem + "\n")
         self.areaChat.config(state='disabled')
         self.areaChat.yview(tk.END)
+
 
 
 if __name__ == "__main__":

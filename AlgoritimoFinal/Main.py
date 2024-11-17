@@ -22,12 +22,12 @@ from copy import deepcopy
 
 s = SES()
 
-chave = "asd"
-mensagem = "Will2: asd"
+chave = "as"
+mensagem = "asad: as\n"
 
 crip = s.criptografar(mensagem, chave)
 
 print(crip)
 
 decrip = s.descriptografar(crip, chave)
-print(decrip)
+print(list(decrip))

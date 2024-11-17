@@ -111,31 +111,6 @@ def test_stringBinariaParaTexto():
     else:
         return True
 
-
-def test_adicionarZerosNecessarios():
-    entrada = "011000010110001001100011"
-    saidaEsperada = "00000000011000010110001001100011"
-    saida = s.adicionarZerosNecessarios(entrada)
-    if saida == None:
-        return saida
-    if saida == saidaEsperada:
-        return False
-    else:
-        return True
-
-
-def test_removerZerosNecessarios():
-    entrada = "00000000011000010110001001100011"
-    saidaEsperada = "011000010110001001100011"
-    saida = s.removerZerosNecessarios(entrada)
-    if saida == None:
-        return saida
-    if saida == saidaEsperada:
-        return False
-    else:
-        return True
-
-
 def test_stringBinariaParaBlocos():
     entrada = "0110000101100010011000110110010001100101011001100110011101101000"
     saidaEsperada = ["01100001011000100110001101100100",
@@ -234,7 +209,6 @@ def test_stringHEXparaMatriz():
 testes = [
     test_dnl0, test_dnl1, test_dnl0reverso, test_dnl1reverso,
     test_textoParaStringBinaria, test_stringBinariaParaTexto,
-    test_adicionarZerosNecessarios, test_removerZerosNecessarios,
     test_stringBinariaParaBlocos, test_blocoParaMatriz, test_matrizParaBloco,
     test_matrizParaStringHEX, test_calcularXORMatrizes,
     test_stringHEXparaMatriz, test_stringHEXparaStringBinaria
