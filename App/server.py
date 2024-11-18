@@ -3,7 +3,7 @@ import threading
 
 # Configuração do servidor
 host = '0.0.0.0'  # Localhost
-porta = 5000
+porta = 80
 
 clientes = []
 

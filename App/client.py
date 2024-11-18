@@ -3,8 +3,7 @@ import threading
 import tkinter as tk
 from tkinter import scrolledtext
 import sys
-sys.path.append('AlgoritimoFinal/')
-#sys.path.append("/home/night/Documents/UNIP/APS-UNIP-2sem/AlgoritimoFinal/")
+sys.path.append('AlgoritimoFinal')
 from SES import SES
 
 # Configuração do servidor
