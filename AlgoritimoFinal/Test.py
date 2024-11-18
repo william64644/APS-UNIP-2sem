@@ -224,3 +224,5 @@ for teste in testes:
     else:
         print(
             f"⬜ Função {nomeFuncao} ainda não implementada")
+
+

@@ -1,7 +1,7 @@
 import sys
 import numpy as np
 from manim import *
-config.disable_caching = True
+#config.disable_caching = True
 sys.path.append("/home/night/Documents/UNIP/APS-UNIP-2sem/AlgoritimoFinal/")
 from SES import SES
 s = SES()
@@ -39,10 +39,10 @@ class chave0(Scene):
         
         lblChave0 = Text("Chave 0:")
         lblChave0.move_to(matrix.get_center()).align_to(matrix, UP*2).shift(UP*0.8)
-        lblChave0.add_updater(lambda m: lblChave0.move_to(matrix.get_center()).align_to(matrix, UP*2).shift(UP*0.8))
+        #lblChave0.add_updater(lambda m: lblChave0.move_to(matrix.get_center()).align_to(matrix, UP*2).shift(UP*0.8))
         self.play(Write(lblChave0))
-        headerGp = VGroup(lblChave, txtChave, txtBinario, lblChaveBinario)
-        self.play(headerGp.animate.shift(UP*4), matrix.animate.move_to(ORIGIN))
+        #headerGp = VGroup(lblChave, txtChave, txtBinario, lblChaveBinario)
+        #self.play(headerGp.animate.shift(UP*4), matrix.animate.move_to(ORIGIN))
 
 # Importante: No Manim a lógica do descocamento comum e reverso é invertida
 def GPdnl0(matrix: MobjectMatrix) ->VGroup:
@@ -164,12 +164,12 @@ class expansaoChave(Scene):
         
         # Executar DNL0
         gp = GPdnl0(matrixChave2)
-        self.play(CyclicReplace(*gp, path_arc=0, run_time = 4), Indicate(path, scale_factor=1.1, color=PURE_GREEN, run_time=1))
+        self.play(CyclicReplace(*gp, path_arc=0, run_time = 5), Indicate(path, scale_factor=1.1, color=PURE_GREEN, run_time=1))
         
         # Criar label Pré-Chave 2
         lblChave2 = Text("Pré-Chave 2")
         lblChave2.move_to(matrixChave2.get_center()).align_to(matrixChave2, UP*2).shift(UP*0.8)
-        self.play(Write(lblChave2), path.animate.set_stroke(GREY_B, opacity=1))
+        self.play(Write(lblChave2))
         
         # Agrupar chaves e mover para esquerda
         gpChaves += VGroup(matrixChave2, lblChave2)
@@ -183,11 +183,11 @@ class expansaoChave(Scene):
         
         # Executar DNL0
         gp = GPdnl0(matrixChave3)
-        self.play(CyclicReplace(*gp, path_arc=0, run_time = 4), Indicate(path, scale_factor=1.1, color=PURE_GREEN, run_time=1))
+        self.play(CyclicReplace(*gp, path_arc=0, run_time = 5), Indicate(path, scale_factor=1.1, color=PURE_GREEN, run_time=1))
         
         lblChave3 = Text("Pré-Chave 3")
         lblChave3.move_to(matrixChave3.get_center()).align_to(matrixChave3, UP*2).shift(UP*0.8)
-        self.play(Write(lblChave3), path.animate.set_stroke(GREY_B, opacity=1))
+        self.play(Write(lblChave3))
         
         # Agrupar chaves e mover para esquerda
         gpChaves += VGroup(matrixChave3, lblChave3)
@@ -201,12 +201,12 @@ class expansaoChave(Scene):
         
         # Executar DNL0
         gp = GPdnl0(matrixChave4)
-        self.play(CyclicReplace(*gp, path_arc=0, run_time = 4), Indicate(path, scale_factor=1.1, color=PURE_GREEN, run_time=1))
+        self.play(CyclicReplace(*gp, path_arc=0, run_time = 5), Indicate(path, scale_factor=1.1, color=PURE_GREEN, run_time=1))
         
         # Criar label Pré-Chave 4
         lblChave4 = Text("Pré-Chave 4")
         lblChave4.move_to(matrixChave4.get_center()).align_to(matrixChave4, UP*2).shift(UP*0.8)
-        self.play(Write(lblChave4), path.animate.set_stroke(GREY_B, opacity=1))
+        self.play(Write(lblChave4))
         
         # Agrupar chaves
         gpChaves += VGroup(matrixChave4, lblChave4)
@@ -220,10 +220,10 @@ class expansaoChave(Scene):
         self.wait(1)
         
         # Atualizar título para XOR entre Chave 0 e Pré-Chaves
-        lblExpansaoXor = Text("Expansão de Chave: XOR entre Chave 0 e Pré-Chaves").scale(0.8).to_edge(UP)
-        lblExpansaoXor[16:].set_color(BLUE)
+        #lblExpansaoXor = Text("Expansão de Chave: XOR entre Chave 0 e Pré-Chaves").scale(0.8).to_edge(UP)
+        #lblExpansaoXor[16:].set_color(BLUE)
         
-        self.play(TransformMatchingShapes(lblExpansao, lblExpansaoXor))
+        #self.play(TransformMatchingShapes(lblExpansao, lblExpansaoXor))
         
         
         novaMatrixChave1 = matrixChave1.copy()
@@ -233,13 +233,7 @@ class expansaoChave(Scene):
         gpNovasChaves = VGroup(novaMatrixChave1, novaMatrixChave2, novaMatrixChave3, novaMatrixChave4)
         
         
-        # Mover o grupo de chaves para embaixo do título
-        gpPreChaves = gpChaves - gpChave0
-        
-        self.play(gpPreChaves.animate.shift(UP*1.9))
 
-        novaMatrixChave1[0][0].text = "XX"
-        self.play(Write(novaMatrixChave1))
         
 class dnl0(Scene):
     def construct(self):
@@ -252,3 +246,51 @@ class dnl0(Scene):
         self.play(dot.animate.shift(LEFT*2))
         
         
+
+class matrixXor(MovingCameraScene):
+    def construct(self):
+        self.play(self.camera.frame.animate.move_to(ORIGIN + LEFT*1.5 + UP*1.2))
+        nums1 = [[np.random.randint(0,4) for _ in range(4)] for _ in range(4)]
+        nums2 = [[np.random.randint(0,4) for _ in range(4)] for _ in range(4)]
+
+        xornums = [[nums1[i][j] ^ nums2[i][j] for j in range(4)] for i in range(4)]
+        colorpal = [GREEN,RED,YELLOW,BLUE]
+        def binstr(val):
+            return Text(f"{val:02b}", color=colorpal[val], font_size=20)
+        matrix_1 = Matrix(
+            nums1,
+            v_buff=0.4,
+            h_buff=0.6,
+            element_to_mobject=binstr,
+        ).to_edge(LEFT)
+        matrix_2 = Matrix(
+            nums2,
+            v_buff=0.4,
+            h_buff=0.6,
+            element_to_mobject=binstr,
+        ).to_edge(UP)
+
+        xormatrix = Matrix(
+            xornums,
+            v_buff=0.4,
+            h_buff=0.6,
+            element_to_mobject=binstr,
+        )
+        for obj in xormatrix.get_entries():
+            obj.set_opacity(0)
+
+        self.play(Create(matrix_1),Create(matrix_2))
+        self.play(Create(xormatrix))
+
+        entries1 = matrix_1.get_entries()
+        entries2 = matrix_2.get_entries()
+        entriesxor = xormatrix.get_entries()
+        for i in range(len(entries1)):
+            self.play(
+                Circumscribe(entries1[i]),
+                Circumscribe(entries2[i]),
+                Circumscribe(entriesxor[i]),
+                entriesxor[i].animate.set_opacity(1)
+            )
+
+        self.wait()
