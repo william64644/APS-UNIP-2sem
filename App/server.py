@@ -20,6 +20,7 @@ def enviarMensagem(mensagem, socketRemetente):
 
 def tratarCliente(socketCliente):
     # Lida com a comunicação com um único cliente.
+    socketCliente.recv(0)
     while True:
         try:
             mensagem = socketCliente.recv(1024)

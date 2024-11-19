@@ -7,8 +7,8 @@ sys.path.append('AlgoritimoFinal')
 from SES import SES
 
 # Configuração do servidor
-HOST = '3.147.81.47'
-PORT = 80
+HOST = 'localhost'
+PORT = 5000
 
 s = SES()
 
